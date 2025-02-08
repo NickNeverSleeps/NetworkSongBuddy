@@ -7,16 +7,15 @@ const csv = require('csv-parser');
 
 const app = express();
 const PORT = 3009;
-const FILE_PATH = ('Z:/OWCS 2025 media log.csv'); // Adjust path as needed
+const FILE_PATH = ('Z:/OWCS 2025 media log.csv');
 
-// Function to remove text inside brackets or parentheses
+// remove text inside brackets
 function cleanTitle(title) {
-    //if (!title) return title; 
     return title.replace(/[\[\(].*?[\]\)]/g, '').trim(); // Removes content inside and including [] and ()
 }
 
 
-// Function to calculate percentage complete
+//calculate percentage complete
 function calculatePercentage(time, duration) {
     try{
     const timeNum = parseFloat(time);
@@ -40,13 +39,13 @@ function getLatestEntry() {
             .pipe(csv())
             .on('data', (row) => {
                 if (row.Title) {
-                    row.Title = cleanTitle(row.Title); // Clean the title field
+                    row.Title = cleanTitle(row.Title); 
                 }
                 if (row.Artist) {
-                    row.Artist = cleanTitle(row.Artist); // Clean the title field
+                    row.Artist = cleanTitle(row.Artist); 
                 }
-                row.perc_complete = calculatePercentage(row.time, row.duration); // Add percentage field
-                latestEntry = row; // Keep updating with the latest row
+                row.perc_complete = calculatePercentage(row.time, row.duration);
+                latestEntry = row;
             })
             .on('end', () => {
                 resolve(latestEntry);
